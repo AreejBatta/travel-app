@@ -39,7 +39,7 @@ app.post('/myDirection', async (req, res) => {
     const { name, lat, lng } = data.geonames[0];
     console.log('GeoNames result:', name, lat, lng);
 
-    res.send({ location: name, lat, lng });
+    res.json({ location: name, lat, lng });
   } catch (error) {
     console.error('Error fetching data from GeoNames API:', error);
     res.status(500).json({ error: 'Error fetching location data' });
@@ -56,22 +56,51 @@ app.post('/travelWeather', async (req, res) => {
   }
 
   try {
-    let weatherUrl = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lng}&units=M&key=${API_KEY_w}`;
-    const weatherResponse= await axios.get(weatherUrl)
+    let weatherResponse; // Declare it once outside the condition blocks
+    let travelWD;
 
-    // Use the forecast API for future dates
-    if (rDays > 0 && rDays < 16) {
-      weatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lng}&days=${rDays}&units=M&key=${API_KEY_w}`;
+    if (rDays > 0 && rDays < 8) {
+      // Fetch current weather
+      const weatherUrl = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lng}&units=M&key=${API_KEY_w}`;
+      weatherResponse = await axios.get(weatherUrl);
+
+      const weatherData = weatherResponse.data.data;
+      if (!weatherData || weatherData.length === 0) {
+        return res.status(404).json({ error: "Weather data not found" });
+      }
+
+      const { temp, weather } = weatherData[0];
+      const { description } = weather;
+      travelWD = { temp, description };
+      console.log(travelWD)
+      return travelWD
+    } 
+    else if (rDays > 7 && rDays < 16) {
+      // Fetch forecast data
+      const weatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lng}&days=${rDays}&units=M&key=${API_KEY_w}`;
+      weatherResponse = await axios.get(weatherUrl);
+      const forecastData = weatherResponse.data.data;
+      if (!forecastData || forecastData.length === 0) {
+        return res.status(404).json({ error: "Weather data not found" });
+      }
+
+      const lastDayWeather = forecastData[forecastData.length - 1];
+      const { temp, weather, app_max_temp, app_min_temp } = lastDayWeather;
+      const { description } = weather;
+      travelWD = { temp, description, app_max_temp, app_min_temp };
+      return travelWD;
+    } 
+    else {
+      return res.status(400).json({ error: "rDays must be between 1 and 15." });
     }
 
-    console.log("Weather API Response:", weatherResponse.data);
-    
-    res.json(weatherResponse.data);
   } catch (error) {
     console.error("Error fetching weather data:", error.response?.data || error.message);
     res.status(500).json({ error: "Error fetching weather data" });
   }
 });
+
+
 
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
