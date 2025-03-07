@@ -31,6 +31,7 @@ const myDirection = async () => {
       const { lat, lng } = response.data;
       if (lat && lng && rDays != null) {
         travelWeather(lat, lng, rDays);
+        getPhoto(city)
         
     } }
     catch (error) {
@@ -58,7 +59,13 @@ const daysCountdown = () => {
 const travelWeather= async (lat,lng, rDays)=>{
   const response = await axios.post('http://localhost:8000/travelWeather', { lat,lng, rDays });
   console.log(response)
-  return response;
+  return response; 
+}
+// function to get my direction city photo
+const getPhoto= async (city)=>{
+  const responseIMG= await axios.post('http://localhost:8000/getPhoto', {city});
+  console.log(responseIMG);
+  return responseIMG;
 }
 // Function to update the UI with the data received
 function updateUI(data) {

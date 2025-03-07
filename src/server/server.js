@@ -13,6 +13,7 @@ app.use(express.static("dist"));
 const port = 8000;
 const API_KEY_G = process.env.API_KEY_G;
 const API_KEY_w = process.env.API_KEY_w;
+const API_KEY_P= process.env.API_KEY_P;
 
 app.get("/", (req, res) => {
   res.sendFile(path.resolve("dist/index.html"));
@@ -99,8 +100,16 @@ app.post('/travelWeather', async (req, res) => {
     res.status(500).json({ error: "Error fetching weather data" });
   }
 });
-
-
+// get my direction city photo
+app.post('/getPhoto', async (req, res) => {
+  const city = req.body.city;
+  console.log(city)
+  const photoURL= `https://pixabay.com/api/?key=${API_KEY_P}&q=${city}&image_type=photo&pretty=true`;
+  const response= await axios.get(photoURL);
+  const imgURL= response.data.hits[1].webformatURL; 
+  res.send(imgURL)
+  console.log(imgURL)
+})
 
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
