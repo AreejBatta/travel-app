@@ -1,0 +1,19 @@
+
+.formContainer {
+    background-color: #c4d6c4;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    justify-content: space-evenly;
+    padding: 10px;
+    align-items: center;
+
+}
+.formContainer input, button{
+    width: 50%;
+    margin: 5px;
+    align-self: center;
+}
+.formRemove{
+    display: none;
+}

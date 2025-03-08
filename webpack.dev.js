@@ -52,5 +52,5 @@ export default{
             cleanStaleWebpackAssets: true,
             protectWebpackAssets: false,
         }),
-      ]
+      ],
 }

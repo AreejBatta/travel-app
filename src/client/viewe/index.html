@@ -6,29 +6,38 @@
     <title>Travel App</title>
 </head>
 <body>
-    <div>
-        <form id="myForm">
-            <label for="location">            
-                <input type="text" id="city">
-            </label>
-            <label for="date">
-                <input type="date" id="date">
-            </label>
-            <button>submit</button>
-        </form>
-    </div>
-    <div class="flight-info">
-        <h2 class="flight-name">my trip</h2>
-        <ul class="data">
-            <li class="city"></li>
-            <li class="weather"></li>
-            <li class="min-temp"></li>
-            <li class="max-temp"></li>
-        </ul>
-        <div id="result"></div>
-    </div>
-    <section>
-        <img src="" alt="">
+    <section class="myProject">
+        <section>
+            <h1>Travel Planner</h1>
+            <div class="gridT">
+                <h3 class="gridI">my trips: </h3>
+                <button class="gridI btnMain" id="addTrip">+ add trip</button>
+            </div>
+        </section>
+        <section>
+            <div class="flight-info gridT">
+                <img src="" alt="" id="imgCity">
+                <h2 class="flight-name">my trip</h2>
+                <ul class="data">
+                    <li class="city"></li>
+                    <li class="weather"></li>
+                    <li class="min-temp"></li>
+                    <li class="max-temp"></li>
+                </ul>
+                <div id="result"></div>
+            </div>
+        </section>
+        <div  id="formContainer" class="formRemove"> 
+            <form id="myForm">
+                <label for="location">            
+                    <input type="text" id="city">
+                </label>
+                <label for="date">
+                    <input type="date" id="date">
+                </label>
+                <button type="submit">submit</button> <!-- Corrected spelling -->
+            </form>
+        </div>
     </section>
 </body>
 </html>

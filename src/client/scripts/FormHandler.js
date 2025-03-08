@@ -1,9 +1,9 @@
 import axios from "axios";
+import { updateUI } from "./updateUI.js";
 
 export function handleSubmit(event) {
   event.preventDefault();
   console.log("Form submitted");
-
   myDirection();
   // daysCountdown();
   // travelWeather();
@@ -14,7 +14,7 @@ const myDirection = async () => {
 
   if (cityElement) {
     const city = cityElement.value.trim();
-    console.log(city);
+    console.log("City entered:", city);
 
     if (!city) {
       alert('Please enter a city name.');
@@ -23,17 +23,19 @@ const myDirection = async () => {
 
     try {
       const response = await axios.post('http://localhost:8000/myDirection', { city });
-      // Update the UI with the data received
-      updateUI(response.data);
-      console.log(response.data);
+      console.log("myDirection response data:", response.data);
       const rDays = daysCountdown();     
-      console.log(rDays) 
+      console.log("Days until travel (rDays):", rDays);
       const { lat, lng } = response.data;
       if (lat && lng && rDays != null) {
+        // Make sure travelWeather returns data in a structure where
+        // weather.description and weather.temp exist.
         travelWeather(lat, lng, rDays);
-        getPhoto(city)
-        
-    } }
+        // Use await with getPhoto so that we wait for it to resolve:
+        getPhoto(city);
+        // updateUI(city, weather, rDays, imgS);
+      }
+    }
     catch (error) {
       console.error('Error during POST request:', error);
       alert('An error occurred while fetching data. Please try again.');
@@ -42,38 +44,32 @@ const myDirection = async () => {
     console.error('City input element not found. Please ensure an input with id="city" exists.');
   }
 };
-// function to calculate remaining dates till the flight date
+
 const daysCountdown = () => {
   const flightDate = new Date(document.getElementById('date').value);
   const todayDate = new Date();
-
-  // Calculate the difference in milliseconds
   const diffTime = flightDate.getTime() - todayDate.getTime();
-
-  // Convert milliseconds to days, rounding up to the next integer
   const rDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return rDays;
 };
 
-// function for weather
-const travelWeather= async (lat,lng, rDays)=>{
-  const response = await axios.post('http://localhost:8000/travelWeather', { lat,lng, rDays });
-  console.log(response)
-  return response; 
-}
-// function to get my direction city photo
-const getPhoto= async (city)=>{
-  const responseIMG= await axios.post('http://localhost:8000/getPhoto', {city});
-  console.log(responseIMG);
-  return responseIMG;
-}
-// Function to update the UI with the data received
-function updateUI(data) {
-  // Assuming you have elements to display the data
-  const resultElement = document.getElementById('result');
-  if (resultElement) {
-    resultElement.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-  } else {
-    console.error('Result element not found. Please ensure an element with id="result" exists.');
+const travelWeather = async (lat, lng, rDays) => {
+  const response = await axios.post('http://localhost:8000/travelWeather', { lat, lng, rDays });
+  console.log("travelWeather response:", response);
+  // If your server sends weather details in response.data,
+  // return that (or adjust updateUI accordingly).
+  return response.data;
+};
+
+const getPhoto = async (city) => {
+  try {
+    console.log("getPhoto: Starting request for city:", city); // Debug log
+    const responseIMG = await axios.post('http://localhost:8000/getPhoto', { city });
+    let imgSRC = responseIMG.data;
+    console.log("getPhoto: Received imgSRC:", imgSRC); // Debug log for image URL
+    return imgSRC;
+  } catch (error) {
+    console.error("getPhoto: Error fetching photo:", error);
   }
-}
+};
+

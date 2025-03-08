@@ -73,10 +73,10 @@ app.post('/travelWeather', async (req, res) => {
       const { temp, weather } = weatherData[0];
       const { description } = weather;
       travelWD = { temp, description };
-      console.log(travelWD)
-      return travelWD
-    } 
-    else if (rDays > 7 && rDays < 16) {
+
+      console.log(travelWD); // This console.log will only run if rDays is between 1 and 7.
+      return travelWD;
+    } else if (rDays > 7 && rDays < 16) {
       // Fetch forecast data
       const weatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lng}&days=${rDays}&units=M&key=${API_KEY_w}`;
       weatherResponse = await axios.get(weatherUrl);
@@ -89,17 +89,19 @@ app.post('/travelWeather', async (req, res) => {
       const { temp, weather, app_max_temp, app_min_temp } = lastDayWeather;
       const { description } = weather;
       travelWD = { temp, description, app_max_temp, app_min_temp };
+      console.log(travelWD)
+
+      // Note: No console.log here.
       return travelWD;
-    } 
-    else {
+    } else {
       return res.status(400).json({ error: "rDays must be between 1 and 15." });
     }
-
   } catch (error) {
     console.error("Error fetching weather data:", error.response?.data || error.message);
     res.status(500).json({ error: "Error fetching weather data" });
   }
 });
+
 // get my direction city photo
 app.post('/getPhoto', async (req, res) => {
   const city = req.body.city;
