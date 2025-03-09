@@ -6,23 +6,25 @@ import { updatWeatherUI } from "./updateWeatherUI.js";
 export function handleSubmit(event) {
   event.preventDefault();
   console.log("Form submitted");
+  // returning the remaining days number to notify the user 
   return myDirection();
-  // daysCountdown();
-  // travelWeather();
 }
+// html element to preview the error 
+const dateError = document.getElementById('dateError'); 
 
+// getting the city entered by user end point to get the lang and lat from the api 
 const myDirection = async () => {
   const cityElement = document.getElementById('city');
 
   if (cityElement) {
     const city = cityElement.value.trim();
     console.log("City entered:", city);
-
+    // if the user didnt enter city the alert will appear
     if (!city) {
       alert('Please enter a city name.');
       return;
     }
-
+    // getting data from api response 
     try {
       const response = await axios.post('http://localhost:8081/myDirection', { city });
       console.log("myDirection response data:", response.data);
@@ -42,19 +44,16 @@ const myDirection = async () => {
       }
     }
     catch (error) {
-      console.error('Error during POST request:', error);
-      alert('An error occurred while fetching data. Please try again.');
+    dateError.textContent = 'Error during post request';
     }
   } else {
-    console.error('City input element not found. Please ensure an input with id="city" exists.');
+    dateError.textContent = 'City element not found';
   }
 };
-
+// taking the date of trip inserted by user and the current date to calculate the remaining days 
 const daysCountdown = () => {
   const flightDate = new Date(document.getElementById('date').value);
   const todayDate = new Date();
-  const dateError = document.getElementById('dateError'); 
-
   const diffTime = flightDate.getTime() - todayDate.getTime();
   const rDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   if (rDays < 0) {
@@ -71,22 +70,22 @@ const daysCountdown = () => {
 
   return rDays;
 };
-
+// depending on the previous api response the weather on trip date will be given 
 const travelWeather = async (lat, lng, rDays) => {
   const response = await axios.post('http://localhost:8081/travelWeather', { lat, lng, rDays });
   const weatherResp= response.data
   return weatherResp;
 };
 
+// according to city entered the function will get city photo from api response 
 const getPhoto = async (city) => {
   try {
-    console.log("getPhoto: Starting request for city:", city); // Debug log
     const responseIMG = await axios.post('http://localhost:8081/getPhoto', { city });
     let imgSRC = responseIMG.data;
-    console.log("getPhoto: Received imgSRC:", imgSRC); // Debug log for image URL
     return imgSRC;
   } catch (error) {
-    console.error("getPhoto: Error fetching photo:", error);
+    dateError.textContent = 'Error fetching photo';
+    dateError.style.display = 'inline';
   }
 };
 

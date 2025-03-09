@@ -22,7 +22,6 @@ app.get("/", (req, res) => {
 // Travel city (GeoNames)
 app.post('/myDirection', async (req, res) => {
   const city = req.body.city;
-  console.log('Received city:', city);
 
   if (!city || city.trim() === '') {
     return res.status(400).json({ error: 'City is required' });
@@ -38,11 +37,9 @@ app.post('/myDirection', async (req, res) => {
     }
 
     const { name, lat, lng } = data.geonames[0];
-    console.log('GeoNames result:', name, lat, lng);
 
     res.json({ location: name, lat, lng });
   } catch (error) {
-    console.error('Error fetching data from GeoNames API:', error);
     res.status(500).json({ error: 'Error fetching location data' });
   }
 });
@@ -50,7 +47,6 @@ app.post('/myDirection', async (req, res) => {
 // Travel weather
 app.post('/travelWeather', async (req, res) => {
   const { lat, lng, rDays } = req.body;
-  console.log("Weather Request:", { lat, lng, rDays });
 
   if (rDays === null) {
     return res.status(400).json({ error: "Invalid flight date." });
@@ -74,7 +70,6 @@ app.post('/travelWeather', async (req, res) => {
       const { description } = weather;
       travelWD = { temp, description };
 
-      console.log(travelWD); // This console.log will only run if rDays is between 1 and 7.
       res.json (travelWD);
     } else if (rDays > 7 && rDays < 16) {
       // Fetch forecast data
@@ -89,13 +84,11 @@ app.post('/travelWeather', async (req, res) => {
       const { temp, weather, app_max_temp, app_min_temp } = lastDayWeather;
       const { description } = weather;
       travelWD = { temp, description, app_max_temp, app_min_temp };
-      console.log(travelWD)
       res.json (travelWD);
     } else {
       return res.status(400).json({ error: "rDays must be between 1 and 15." });
     }
   } catch (error) {
-    console.error("Error fetching weather data:", error.response?.data || error.message);
     res.status(500).json({ error: "Error fetching weather data" });
   }
 });
@@ -104,7 +97,6 @@ app.post('/travelWeather', async (req, res) => {
 app.post('/getPhoto', async (req, res) => {
   try {
   const city = req.body.city;
-  console.log(city)
   const photoURL= `https://pixabay.com/api/?key=${API_KEY_P}&q=${city}&image_type=photo&pretty=true`;
   const response= await axios.get(photoURL);
   if (response.data.hits.length === 0){
@@ -112,7 +104,7 @@ app.post('/getPhoto', async (req, res) => {
   }
   const imgURL= response.data.hits[1].webformatURL; 
   res.json(imgURL)
-  console.log(imgURL)}
+}
   catch(error){
     res.status(500).json({error:"error fetching photo"})
   }})
@@ -120,4 +112,3 @@ app.post('/getPhoto', async (req, res) => {
   app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
   });
-// app.listen(port, () => console.log(`Server is running on port ${port}`));
