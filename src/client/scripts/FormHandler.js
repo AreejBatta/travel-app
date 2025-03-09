@@ -6,7 +6,7 @@ import { updatWeatherUI } from "./updateWeatherUI.js";
 export function handleSubmit(event) {
   event.preventDefault();
   console.log("Form submitted");
-  myDirection();
+  return myDirection();
   // daysCountdown();
   // travelWeather();
 }
@@ -24,7 +24,7 @@ const myDirection = async () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8000/myDirection', { city });
+      const response = await axios.post('http://localhost:8081/myDirection', { city });
       console.log("myDirection response data:", response.data);
       const rDays = daysCountdown();     
       updateUI(city,rDays);
@@ -38,6 +38,7 @@ const myDirection = async () => {
         const imgSRC= await getPhoto(city);
         updatWeatherUI(weatherD, rDays);
         updateImgUI(imgSRC, city);
+        return rDays;
       }
     }
     catch (error) {
@@ -52,13 +53,27 @@ const myDirection = async () => {
 const daysCountdown = () => {
   const flightDate = new Date(document.getElementById('date').value);
   const todayDate = new Date();
+  const dateError = document.getElementById('dateError'); 
+
   const diffTime = flightDate.getTime() - todayDate.getTime();
   const rDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  if (rDays < 0) {
+    dateError.textContent = 'The trip date cannot be in the past.';
+    dateError.style.display = 'inline';
+    return null;
+  }
+
+  if (rDays > 16) {
+    dateError.textContent = 'The trip date cannot be more than 16 days in the future.';
+    dateError.style.display = 'inline';
+    return null;
+  }
+
   return rDays;
 };
 
 const travelWeather = async (lat, lng, rDays) => {
-  const response = await axios.post('http://localhost:8000/travelWeather', { lat, lng, rDays });
+  const response = await axios.post('http://localhost:8081/travelWeather', { lat, lng, rDays });
   const weatherResp= response.data
   return weatherResp;
 };
@@ -66,7 +81,7 @@ const travelWeather = async (lat, lng, rDays) => {
 const getPhoto = async (city) => {
   try {
     console.log("getPhoto: Starting request for city:", city); // Debug log
-    const responseIMG = await axios.post('http://localhost:8000/getPhoto', { city });
+    const responseIMG = await axios.post('http://localhost:8081/getPhoto', { city });
     let imgSRC = responseIMG.data;
     console.log("getPhoto: Received imgSRC:", imgSRC); // Debug log for image URL
     return imgSRC;

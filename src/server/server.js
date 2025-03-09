@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("dist"));
 
-const port = 8000;
+const port = 8081;
 const API_KEY_G = process.env.API_KEY_G;
 const API_KEY_w = process.env.API_KEY_w;
 const API_KEY_P= process.env.API_KEY_P;

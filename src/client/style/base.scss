@@ -10,7 +10,10 @@
     padding: 0;
     box-sizing: border-box;
 }
-
+footer{
+    background-color: #4a524a;
+    color: #c4d6c4;
+}
 ul li {
     display: block;
     margin: 5px;
@@ -38,9 +41,10 @@ h1 {
 .btnMain {
     width: 25%;
     margin-left: 60%;
+    z-index: 2;
 }
 
-button {
+button, .toGo {
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     padding: 2px 5px;
     border-radius: 10px;
@@ -57,6 +61,7 @@ button:hover {
     background-color: #c4d6c4;
     padding: 5px;
     margin: 10px;
+    height: 80%;
 }
 
 .city, #depDate {
@@ -106,22 +111,35 @@ button:hover {
     padding: 20px;
     border-radius: 10px;
 }
-
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-left: 10px;
+    display: none; 
+  }
 /* Responsive Design */
 @media (max-width: 768px) {
-    /* Tablet and Mobile Styles */
+    .error-message {
+        color: red;
+        font-size: 0.3em;
+        margin-left: 10px;
+        display: none; 
+      }
     .myProject {
         margin: 10px;
         padding: 5px;
     }
-
+    ul li {
+        margin: 2px;
+        font-size: 14px;
+    }
     h1 {
-        font-size: x-large;
+        font-size: large;
     }
 
     .btnMain {
         width: 50%; /* Increase button width for smaller screens */
-        margin-left: 25%; /* Center the button */
+        margin-left: 20%; /* Center the button */
     }
 
     .travelInfo {
@@ -140,6 +158,12 @@ button:hover {
     #backgroundContainer .background-content {
         padding: 10px; /* Reduce padding for smaller screens */
     }
+    .toGo {
+        display: none;
+    }
+    .imgC img{
+        height: 100%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -151,6 +175,7 @@ button:hover {
 
     h1 {
         font-size: large; /* Further reduce font size for mobile */
+        margin-top: 10px;
     }
 
     .btnMain {
