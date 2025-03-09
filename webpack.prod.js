@@ -4,7 +4,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import { GenerateSW } from "workbox-webpack-plugin"; 
+import { InjectManifest } from 'workbox-webpack-plugin';
+
+// import { GenerateSW } from "workbox-webpack-plugin"; 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -50,9 +52,11 @@ export default {
       protectWebpackAssets: false,
     }),
     new MiniCssExtractPlugin({ filename: "mini.css" }),
-    new GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true,
-    }), 
+    new InjectManifest({
+      swSrc: './src/sw.js', // Path to your custom service worker file
+      swDest: 'service-worker.js', // Output file name
+    })
+    , 
+    
   ],
 };

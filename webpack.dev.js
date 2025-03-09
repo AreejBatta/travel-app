@@ -2,7 +2,7 @@ import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "path";
 import { fileURLToPath } from "url";
-import { GenerateSW } from "workbox-webpack-plugin";
+// import { GenerateSW } from "workbox-webpack-plugin";
 import { dirname } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,6 +23,14 @@ export default{
             keep: /\.git/,
         },
     },
+    devServer: {
+    port: 8000, // Change the port to 3000 (or any other port)
+    open: false, // Disable automatic browser opening
+    static: {
+      directory: path.resolve(__dirname, "dist"), // Serve files from the "dist" directory
+    },
+    hot: true, // Enable hot module replacement (HMR)
+  },
     resolve: {
         extensions: [".js", ".jsx", ".json"],
       },
@@ -52,6 +60,6 @@ export default{
             cleanStaleWebpackAssets: true,
             protectWebpackAssets: false,
         }),
-        new GenerateSW(), 
+        // new GenerateSW(), 
     ],
 }

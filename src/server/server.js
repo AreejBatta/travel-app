@@ -3,7 +3,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import axios from "axios";
 import path from "path";
-import { error } from "console";
 
 dotenv.config();
 const app = express();
@@ -118,5 +117,7 @@ app.post('/getPhoto', async (req, res) => {
     res.status(500).json({error:"error fetching photo"})
   }})
 
-
-app.listen(port, () => console.log(`Server is running on port ${port}`));
+  app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+  });
+// app.listen(port, () => console.log(`Server is running on port ${port}`));
