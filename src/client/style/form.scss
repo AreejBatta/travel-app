@@ -1,14 +1,42 @@
 
-.formContainer {
-    background-color: #c4d6c4;
+/* Background Image Container */
+#backgroundContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
-    flex-direction: column;
-    z-index: 1;
-    justify-content: space-evenly;
-    padding: 10px;
+    justify-content: center;
     align-items: center;
-
+    color: white;
+    text-align: center;
+    z-index: 1; /* Lower z-index */
 }
+
+/* Form Container */
+#formContainer {
+    position: fixed; /* Position the form fixed */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center the form */
+    z-index: 2; /* Higher z-index than the background container */
+    background-color: white; /* Add a background color to the form */
+    padding: 20px; /* Add padding for better appearance */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add a shadow */
+    display: none; /* Initially hidden */
+}
+
+/* Show the form when the formContainer class is added */
+#formContainer.formContainer {
+    display: block;
+}
+
 .formContainer input{
     width: 50%;
     margin: 5px;
