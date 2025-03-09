@@ -10,24 +10,47 @@
         <section>
             <h1>Travel Planner</h1>
             <div class="gridT">
-                <h3 class="gridI">my trips: </h3>
+                <h3 class="gridI">my trip: </h3>
                 <button class="gridI btnMain" id="addTrip">+ add trip</button>
             </div>
         </section>
-        <section>
+        <!-- Add a hidden class to travelInfo initially -->
+        <section class="travelInfo hidden">
             <div class="flight-info gridT">
-                <img src="" alt="" id="imgCity">
-                <h2 class="flight-name">my trip</h2>
-                <ul class="data">
-                    <li class="city"></li>
-                    <li class="weather"></li>
-                    <li class="min-temp"></li>
-                    <li class="max-temp"></li>
-                </ul>
-                <div id="result"></div>
+                <div>
+                    <div id="imgC"></div>
+                    <button>+ add loading info</button> 
+                    <button>+ add packaging list</button> 
+                    <button>+ add notes</button> 
+                </div>
+                <div class="">
+                    <ul class="data">
+                        <li class="city"></li>
+                        <li id="depDate"></li>
+                    </ul>
+                    <div class="gridT">
+                        <h3>Flight info:</h3>
+                        <ul>
+                            <li>ORD 3:00PM</li>
+                            <li>FLIGHT 22 UDCITY AIR </li>
+                            <li>ORD 3:00PM</li>
+                            <li>FLIGHT 44 UDCITY AIR</li>
+                        </ul>
+                    </div>
+                    <div class="gridT">
+                        <button class="svTrip"> SAVE TRIP</button>
+                        <button class="rmvTrip"> REMOVE TRIP</button>
+                    </div>
+                    <ul>
+                        <li class="rDays"></li>
+                        <li class="weather"></li>
+                        <li class="minTemp"></li>
+                        <li class="maxTemp"></li>
+                    </ul>
+                </div>
             </div>
         </section>
-        <div  id="formContainer" class="formRemove"> 
+        <div id="formContainer" class="formRemove"> 
             <form id="myForm">
                 <label for="location">            
                     <input type="text" id="city">
@@ -35,7 +58,7 @@
                 <label for="date">
                     <input type="date" id="date">
                 </label>
-                <button type="submit">submit</button> <!-- Corrected spelling -->
+                <button type="submit">submit</button> 
             </form>
         </div>
     </section>

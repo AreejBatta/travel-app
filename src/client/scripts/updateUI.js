@@ -1,19 +1,17 @@
-export function updateUI(cityElement, weather, rDays, imgS) {
-    const resultElement = document.getElementById('result');
-    if (resultElement) {
-      // Make sure that 'weather' has the expected properties.
-      // For example, if travelWeather returns response.data,
-      // then weather.description and weather.temp should exist.
-      alert('i exist')
-      resultElement.innerHTML = `
-        <h2>Travel Details</h2>
-        <p><strong>City:</strong> ${cityElement}</p>
-        <p><strong>Days Until Travel:</strong> ${rDays}</p>
-        <p><strong>Weather Forecast:</strong> ${weather.description} (Temp: ${weather.temp}°C)</p>
-        <img src="${imgS}" alt="Image of ${city}" style="max-width:100%; height:auto;">
-      `;
-    } else {
-      console.error('Result element not found. Please ensure an element with id="result" exists.');
-    }
+export function updateUI(city, rDays) {
+  const cityElement = document.querySelector('.city');
+  const rDaysElement = document.querySelector('.rDays');
+  const dDate = document.getElementById('date').value;
+  const depDate = document.getElementById('depDate');
+
+  // Capitalize the city name
+  const capitalizedCity = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+
+  if (cityElement && rDaysElement && depDate) {
+      cityElement.innerHTML = `My Travel to: ${capitalizedCity}`;
+      depDate.innerHTML = `Departing Date: ${dDate}`;
+      rDaysElement.innerHTML = `<h3> ${capitalizedCity} is ${rDays} days away! </h3>`;
+  } else {
+      console.error('Elements are not found');
   }
-  
+}

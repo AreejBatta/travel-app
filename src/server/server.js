@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import axios from "axios";
 import path from "path";
+import { error } from "console";
 
 dotenv.config();
 const app = express();
@@ -75,7 +76,7 @@ app.post('/travelWeather', async (req, res) => {
       travelWD = { temp, description };
 
       console.log(travelWD); // This console.log will only run if rDays is between 1 and 7.
-      return travelWD;
+      res.json (travelWD);
     } else if (rDays > 7 && rDays < 16) {
       // Fetch forecast data
       const weatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lng}&days=${rDays}&units=M&key=${API_KEY_w}`;
@@ -90,9 +91,7 @@ app.post('/travelWeather', async (req, res) => {
       const { description } = weather;
       travelWD = { temp, description, app_max_temp, app_min_temp };
       console.log(travelWD)
-
-      // Note: No console.log here.
-      return travelWD;
+      res.json (travelWD);
     } else {
       return res.status(400).json({ error: "rDays must be between 1 and 15." });
     }
@@ -104,14 +103,20 @@ app.post('/travelWeather', async (req, res) => {
 
 // get my direction city photo
 app.post('/getPhoto', async (req, res) => {
+  try {
   const city = req.body.city;
   console.log(city)
   const photoURL= `https://pixabay.com/api/?key=${API_KEY_P}&q=${city}&image_type=photo&pretty=true`;
   const response= await axios.get(photoURL);
+  if (response.data.hits.length === 0){
+    return res.status(404).json({error:'city picture not found'})
+  }
   const imgURL= response.data.hits[1].webformatURL; 
-  res.send(imgURL)
-  console.log(imgURL)
-})
+  res.json(imgURL)
+  console.log(imgURL)}
+  catch(error){
+    res.status(500).json({error:"error fetching photo"})
+  }})
 
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));

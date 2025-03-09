@@ -1,5 +1,7 @@
 import axios from "axios";
 import { updateUI } from "./updateUI.js";
+import { updateImgUI } from "./updateImgUI.js";
+import { updatWeatherUI } from "./updateWeatherUI.js";
 
 export function handleSubmit(event) {
   event.preventDefault();
@@ -25,15 +27,17 @@ const myDirection = async () => {
       const response = await axios.post('http://localhost:8000/myDirection', { city });
       console.log("myDirection response data:", response.data);
       const rDays = daysCountdown();     
+      updateUI(city,rDays);
       console.log("Days until travel (rDays):", rDays);
       const { lat, lng } = response.data;
       if (lat && lng && rDays != null) {
-        // Make sure travelWeather returns data in a structure where
         // weather.description and weather.temp exist.
-        travelWeather(lat, lng, rDays);
-        // Use await with getPhoto so that we wait for it to resolve:
-        getPhoto(city);
-        // updateUI(city, weather, rDays, imgS);
+        const weatherData= await travelWeather(lat, lng, rDays);
+        const weatherD= weatherData
+        console.log(weatherD)
+        const imgSRC= await getPhoto(city);
+        updatWeatherUI(weatherD, rDays);
+        updateImgUI(imgSRC, city);
       }
     }
     catch (error) {
@@ -55,10 +59,8 @@ const daysCountdown = () => {
 
 const travelWeather = async (lat, lng, rDays) => {
   const response = await axios.post('http://localhost:8000/travelWeather', { lat, lng, rDays });
-  console.log("travelWeather response:", response);
-  // If your server sends weather details in response.data,
-  // return that (or adjust updateUI accordingly).
-  return response.data;
+  const weatherResp= response.data
+  return weatherResp;
 };
 
 const getPhoto = async (city) => {
