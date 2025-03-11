@@ -72,9 +72,15 @@ const daysCountdown = () => {
 };
 // depending on the previous api response the weather on trip date will be given 
 const travelWeather = async (lat, lng, rDays) => {
-  const response = await axios.post('http://localhost:8081/travelWeather', { lat, lng, rDays });
-  const weatherResp= response.data
-  return weatherResp;
+  try {
+    const response = await axios.post('http://localhost:8081/travelWeather', { lat, lng, rDays });
+    console.log("Travel Weather Response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching travel weather:", error.response?.data || error.message);
+    dateError.textContent = 'Error fetching weather data';
+    dateError.style.display = 'inline';
+  }
 };
 
 // according to city entered the function will get city photo from api response 

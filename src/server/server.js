@@ -53,13 +53,13 @@ app.post('/travelWeather', async (req, res) => {
   }
 
   try {
-    let weatherResponse; // Declare it once outside the condition blocks
+    let weatherResponse;
     let travelWD;
 
     if (rDays > 0 && rDays < 8) {
-      // Fetch current weather
       const weatherUrl = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lng}&units=M&key=${API_KEY_w}`;
       weatherResponse = await axios.get(weatherUrl);
+      console.log("Current Weather Response:", weatherResponse.data);
 
       const weatherData = weatherResponse.data.data;
       if (!weatherData || weatherData.length === 0) {
@@ -69,12 +69,11 @@ app.post('/travelWeather', async (req, res) => {
       const { temp, weather } = weatherData[0];
       const { description } = weather;
       travelWD = { temp, description };
-
-      res.json (travelWD);
     } else if (rDays > 7 && rDays < 16) {
-      // Fetch forecast data
       const weatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lng}&days=${rDays}&units=M&key=${API_KEY_w}`;
       weatherResponse = await axios.get(weatherUrl);
+      console.log("Forecast Weather Response:", weatherResponse.data);
+
       const forecastData = weatherResponse.data.data;
       if (!forecastData || forecastData.length === 0) {
         return res.status(404).json({ error: "Weather data not found" });
@@ -84,11 +83,13 @@ app.post('/travelWeather', async (req, res) => {
       const { temp, weather, app_max_temp, app_min_temp } = lastDayWeather;
       const { description } = weather;
       travelWD = { temp, description, app_max_temp, app_min_temp };
-      res.json (travelWD);
     } else {
       return res.status(400).json({ error: "rDays must be between 1 and 15." });
     }
+
+    res.json(travelWD);
   } catch (error) {
+    console.error("Error fetching weather data:", error.response?.data || error.message);
     res.status(500).json({ error: "Error fetching weather data" });
   }
 });
@@ -111,4 +112,4 @@ app.post('/getPhoto', async (req, res) => {
 
   app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
-  });
+  })
