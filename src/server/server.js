@@ -13,6 +13,7 @@ app.use(express.static("dist"));
 const port = 8081;
 const API_KEY_G = process.env.API_KEY_G;
 const API_KEY_w = process.env.API_KEY_w;
+console.log("Weatherbit API Key:", API_KEY_w);
 const API_KEY_P= process.env.API_KEY_P;
 
 app.get("/", (req, res) => {
@@ -57,7 +58,7 @@ app.post('/travelWeather', async (req, res) => {
     let travelWD;
 
     if (rDays > 0 && rDays < 8) {
-      const weatherUrl = `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lng}&units=M&key=${API_KEY_w}`;
+      const weatherUrl= `https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lng}&key=${API_KEY_w}`;
       weatherResponse = await axios.get(weatherUrl);
       console.log("Current Weather Response:", weatherResponse.data);
 
@@ -99,6 +100,7 @@ app.post('/getPhoto', async (req, res) => {
   try {
   const city = req.body.city;
   const photoURL= `https://pixabay.com/api/?key=${API_KEY_P}&q=${city}&image_type=photo&pretty=true`;
+
   const response= await axios.get(photoURL);
   if (response.data.hits.length === 0){
     return res.status(404).json({error:'city picture not found'})

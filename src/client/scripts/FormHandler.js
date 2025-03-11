@@ -44,7 +44,7 @@ const myDirection = async () => {
       }
     }
     catch (error) {
-    dateError.textContent = 'Error during post request';
+    dateError.textContent = 'Your trip remaining days must not be more than 16';
     }
   } else {
     dateError.textContent = 'City element not found';
